@@ -55,7 +55,6 @@ document.addEventListener('DOMContentLoaded', () => {
   let notificationSound = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-simple-notification-tone-3927.mp3');
   let windowFocused = true;
   let lastSeenTimestamp = Date.now();
-  let unreadCount = 0;
   
   // Update notification toggle button state
   if (notificationToggle) {
@@ -65,18 +64,12 @@ document.addEventListener('DOMContentLoaded', () => {
   // Track window focus for notifications
   window.addEventListener('focus', () => {
     windowFocused = true;
-    resetUnreadCount();
-    document.title = document.querySelector('title').getAttribute('data-default');
+    lastSeenTimestamp = Date.now();
   });
   
   window.addEventListener('blur', () => {
     windowFocused = false;
-    lastSeenTimestamp = Date.now();
   });
-  
-  function resetUnreadCount() {
-    unreadCount = 0;
-  }
 
   // Handle notification permission
   function requestNotificationPermission() {
@@ -379,7 +372,6 @@ document.addEventListener('DOMContentLoaded', () => {
     chatDiv.style.display = 'block';
     const currentUser = JSON.parse(localStorage.getItem('user'));
     displayName.textContent = currentUser.username;
-    resetUnreadCount();
     
     const messagesRef = ref(db, `parties/${globalPartyCode}/messages`);
     onValue(messagesRef, (snapshot) => {
@@ -396,15 +388,12 @@ document.addEventListener('DOMContentLoaded', () => {
           return (a.timestamp || 0) - (b.timestamp || 0);
         });
         
-        let newMessageCount = 0;
-        
         messageArray.forEach(msg => {
           const div = document.createElement('div');
           div.className = 'message';
           
           // Check if this is a new message (after last seen)
           if (msg.timestamp && msg.timestamp > lastSeenTimestamp) {
-            newMessageCount++;
             div.classList.add('new-message');
           }
           
@@ -438,9 +427,32 @@ document.addEventListener('DOMContentLoaded', () => {
           messagesDiv.appendChild(div);
         });
         
-        // If window not focused, update the unread count and show notification
-        if (!windowFocused && newMessageCount > 0) {
-          handleNewMessages(newMessageCount, messageArray.slice(-1)[0]);
+        // If window not focused, play notification sound
+        if (!windowFocused && messageArray.length > 0) {
+          const latestMessage = messageArray[messageArray.length - 1];
+          if (latestMessage.timestamp > lastSeenTimestamp) {
+            if (notificationsEnabled) {
+              notificationSound.play().catch(e => {
+                console.log('Sound play error:', e);
+              });
+            
+              // Show browser notification if enabled
+              if (Notification.permission === 'granted') {
+                const notification = new Notification("New Message in Eclipse", {
+                  body: `${latestMessage.username}: ${latestMessage.text}`,
+                  icon: 'favicon.png'
+                });
+                
+                notification.onclick = function() {
+                  window.focus();
+                  this.close();
+                };
+                
+                // Auto close after 5 seconds
+                setTimeout(() => notification.close(), 5000);
+              }
+            }
+          }
         }
       }
       
@@ -449,38 +461,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   
     deletePartyBtn.style.display = 'none'; 
-  }
-  
-  // Handle new messages (notification, sound, update title)
-  function handleNewMessages(count, latestMessage) {
-    // Update unread count
-    unreadCount += count;
-    
-    // Update page title with unread count
-    document.title = `(${unreadCount}) ${document.querySelector('title').getAttribute('data-default')}`;
-    
-    // Play notification sound if enabled
-    if (notificationsEnabled) {
-      notificationSound.play().catch(e => {
-        console.log('Sound play error:', e);
-      });
-    
-      // Show browser notification if enabled and we have a new message
-      if (Notification.permission === 'granted' && latestMessage) {
-        const notification = new Notification("New Message in Eclipse", {
-          body: `${latestMessage.username}: ${latestMessage.text}`,
-          icon: 'favicon.png'
-        });
-        
-        notification.onclick = function() {
-          window.focus();
-          this.close();
-        };
-        
-        // Auto close after 5 seconds
-        setTimeout(() => notification.close(), 5000);
-      }
-    }
   }
   
   sendBtn.addEventListener('click', () => {
@@ -540,7 +520,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const currentUser = JSON.parse(localStorage.getItem('user'));
     displayName.textContent = currentUser.username;
     partyCodeDisplay.textContent = partyCode;
-    resetUnreadCount();
 
     const messagesRef = ref(db, `parties/${partyCode}/messages`);
     onValue(messagesRef, (snapshot) => {
@@ -557,15 +536,12 @@ document.addEventListener('DOMContentLoaded', () => {
           return (a.timestamp || 0) - (b.timestamp || 0);
         });
         
-        let newMessageCount = 0;
-        
         messageArray.forEach(msg => {
           const div = document.createElement('div');
           div.className = 'message';
           
           // Check if this is a new message (after last seen)
           if (msg.timestamp && msg.timestamp > lastSeenTimestamp) {
-            newMessageCount++;
             div.classList.add('new-message');
           }
           
@@ -599,9 +575,32 @@ document.addEventListener('DOMContentLoaded', () => {
           messagesDiv.appendChild(div);
         });
         
-        // If window not focused, update the unread count and show notification
-        if (!windowFocused && newMessageCount > 0) {
-          handleNewMessages(newMessageCount, messageArray.slice(-1)[0]);
+        // If window not focused, play notification sound
+        if (!windowFocused && messageArray.length > 0) {
+          const latestMessage = messageArray[messageArray.length - 1];
+          if (latestMessage.timestamp > lastSeenTimestamp) {
+            if (notificationsEnabled) {
+              notificationSound.play().catch(e => {
+                console.log('Sound play error:', e);
+              });
+            
+              // Show browser notification if enabled
+              if (Notification.permission === 'granted') {
+                const notification = new Notification("New Message in Eclipse", {
+                  body: `${latestMessage.username}: ${latestMessage.text}`,
+                  icon: 'favicon.png'
+                });
+                
+                notification.onclick = function() {
+                  window.focus();
+                  this.close();
+                };
+                
+                // Auto close after 5 seconds
+                setTimeout(() => notification.close(), 5000);
+              }
+            }
+          }
         }
       }
       messagesDiv.scrollTop = messagesDiv.scrollHeight;
