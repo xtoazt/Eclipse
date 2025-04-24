@@ -449,7 +449,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 };
                 
                 // Auto close after 5 seconds
-                setTimeout(() => notification.close(), 5000);
+                setTimeout(() => notification.close(), 10000);
               }
             }
           }
