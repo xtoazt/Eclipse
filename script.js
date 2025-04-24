@@ -438,7 +438,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
               // Show browser notification if enabled
               if (Notification.permission === 'granted') {
-                const notification = new Notification("New Message in Eclipse", {
+                const notification = new Notification("New Eclipse Message", {
                   body: `${latestMessage.username}: ${latestMessage.text}`,
                   icon: 'favicon.png'
                 });
