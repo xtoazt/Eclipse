@@ -175,7 +175,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
       const month = date.getMonth() + 1;
       const day = date.getDate();
-      return `${month}/${day} ${hours}:${minutes} ${ampm}`;
+      return `${month}/${day} - ${hours}:${minutes} ${ampm}`;
     }
   }
 
