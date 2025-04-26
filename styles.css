@@ -80,13 +80,18 @@ body::after {
 
 /* Enhancing the chat box */
 #chat {
-  max-width: 1200px;
-  width: 95%;     
-  padding: 40px;
+  max-width: 900px; 
+  width: 95%; 
+  max-height: 90vh; 
+  overflow: hidden; 
+  padding: 30px; 
   background: rgba(18, 18, 18, 0.95);
   border: 1px solid rgba(179, 57, 241, 0.3);
-  position: relative; 
+  position: relative;
   display: none;
+  display: flex;
+  flex-direction: column; /* so it stacks properly */
+  justify-content: space-between;
 }
 #chat.active {
   display: block;
