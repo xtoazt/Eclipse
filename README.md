@@ -1,3 +1,9 @@
+# 🌑 Eclipse - Static Chatroom
+
+**Eclipse** is a free, clean, and simple static chatroom built entirely with **HTML**, **CSS**, and **JavaScript**.  
+It’s designed to be **unblocked** and **easy to use**, perfect for chatting with friends during school!
+
+---
 
 - `index.html` — The main chatroom page.
 - `style.css` — The styling for a smooth, clean look.
