@@ -13,10 +13,8 @@ It’s designed to be **unblocked** and **easy to use**, perfect for chatting wi
 
 ## 🚀 How to Use
 1. **Download or clone** this repository.
-2. Open `index.html` in any browser.
-3. Start chatting with your friends!
+2. Host it anywhere!
 
-*(Optional)* Host it on a free service like GitHub Pages, Vercel, or Netlify to make it even easier to access.
 
 ---
 
@@ -26,14 +24,9 @@ It’s designed to be **unblocked** and **easy to use**, perfect for chatting wi
 ---
 
 ## 🔒 Notes
-- This is **static only** — meaning chats are not saved once you refresh or leave the page.
-- For live saving across users, you would need a server or database (but static keeps it simple and unblocked 😉).
+- This is **static only** — meaning Eclipse can be hosted anywhere.
 
----
 
-## 🎨 Screenshots
-*(Insert a screenshot if you want here!)*  
-*(Example: A clean, light background with a friendly chat bubble design.)*
 
 ---
 
@@ -50,6 +43,6 @@ It’s designed to be **unblocked** and **easy to use**, perfect for chatting wi
 
 ---
 
-## 📜 License
-This project is free to use!  
-*(You can add an actual license file if you want — like MIT License.)*
+## 📜 Links
+https://eclipse.spacewalk.org
+https://eclipse-chat.vercel.app
